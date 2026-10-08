@@ -1,73 +1,50 @@
 {% extends 'base.html' %}
 
-{% block title %}Attendance{% endblock %}
+{% block title %}Reports{% endblock %}
 
 {% block content %}
 <section class="page-header">
-    <h1>Mark Attendance</h1>
-    <p>Record student attendance for any selected date.</p>
+    <h1>Attendance Reports</h1>
+    <p>View cumulative attendance performance for students.</p>
 </section>
 
 <div class="panel">
     <div class="panel-header">
-        <h2>Select Date</h2>
+        <h2>Summary Table</h2>
     </div>
-    <form method="GET" class="date-form">
-        <label for="attendance_date">Date</label>
-        <input type="date" id="attendance_date" name="date" value="{{ selected_date }}">
-        <button type="submit" class="primary-btn">Load</button>
-    </form>
-</div>
-
-<div class="panel">
-    <div class="panel-header">
-        <h2>Attendance Sheet for {{ selected_date }}</h2>
-    </div>
-
-    <form method="POST">
-        <input type="hidden" name="attendance_date" value="{{ selected_date }}">
-        <table>
-            <thead>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Roll No.</th>
+                <th>Department</th>
+                <th>Year</th>
+                <th>Present</th>
+                <th>Absent</th>
+                <th>Late</th>
+                <th>Total Marked</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if report %}
+                {% for row in report %}
                 <tr>
-                    <th>Student</th>
-                    <th>Roll No.</th>
-                    <th>Department</th>
-                    <th>Status</th>
-                    <th>Notes</th>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.roll_no }}</td>
+                    <td>{{ row.department }}</td>
+                    <td>{{ row.year }}</td>
+                    <td>{{ row.present_days or 0 }}</td>
+                    <td>{{ row.absent_days or 0 }}</td>
+                    <td>{{ row.late_days or 0 }}</td>
+                    <td>{{ row.total_marked or 0 }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                {% if students %}
-                    {% for student in students %}
-                    <tr>
-                        <td>{{ student.name }}</td>
-                        <td>{{ student.roll_no }}</td>
-                        <td>{{ student.department }}</td>
-                        <td>
-                            <select name="status_{{ student.id }}">
-                                <option value="Present" {% if status_map.get(student.id) == 'Present' %}selected{% endif %}>Present</option>
-                                <option value="Absent" {% if status_map.get(student.id) == 'Absent' %}selected{% endif %}>Absent</option>
-                                <option value="Late" {% if status_map.get(student.id) == 'Late' %}selected{% endif %}>Late</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" name="notes_{{ student.id }}" value="{{ notes_map.get(student.id, '') }}" placeholder="Optional note">
-                        </td>
-                    </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="5">No students available. Add a student first.</td>
-                    </tr>
-                {% endif %}
-            </tbody>
-        </table>
-
-        {% if students %}
-        <div class="form-actions">
-            <button type="submit" class="primary-btn">Save Attendance</button>
-        </div>
-        {% endif %}
-    </form>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="8">No report data available yet.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}
