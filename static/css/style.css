@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Attendance Reports</h1>
+    <p>View cumulative attendance performance for students.</p>
+</section>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Summary Table</h2>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Roll No.</th>
+                <th>Department</th>
+                <th>Year</th>
+                <th>Present</th>
+                <th>Absent</th>
+                <th>Late</th>
+                <th>Total Marked</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if report %}
+                {% for row in report %}
+                <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.roll_no }}</td>
+                    <td>{{ row.department }}</td>
+                    <td>{{ row.year }}</td>
+                    <td>{{ row.present_days or 0 }}</td>
+                    <td>{{ row.absent_days or 0 }}</td>
+                    <td>{{ row.late_days or 0 }}</td>
+                    <td>{{ row.total_marked or 0 }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="8">No report data available yet.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

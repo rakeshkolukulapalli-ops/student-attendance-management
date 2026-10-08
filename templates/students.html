@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Student Attendance Dashboard</h1>
+    <p>Manage student records, attendance, and summaries from one place.</p>
+</section>
+
+<div class="stats-grid">
+    <div class="stat-card primary">
+        <span>Total Students</span>
+        <strong>{{ total_students }}</strong>
+    </div>
+    <div class="stat-card success">
+        <span>Present Today</span>
+        <strong>{{ present_today }}</strong>
+    </div>
+    <div class="stat-card warning">
+        <span>Absent Today</span>
+        <strong>{{ absent_today }}</strong>
+    </div>
+    <div class="stat-card danger">
+        <span>Late Today</span>
+        <strong>{{ late_today }}</strong>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Recent Attendance Entries</h2>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Roll No.</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if recent_entries %}
+                {% for item in recent_entries %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.roll_no }}</td>
+                    <td>{{ item.attendance_date }}</td>
+                    <td><span class="badge badge-{{ item.status.lower() }}">{{ item.status }}</span></td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4">No attendance has been recorded yet.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
